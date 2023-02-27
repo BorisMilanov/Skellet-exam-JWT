@@ -19,8 +19,20 @@ async function register(username, password) {
     return token;
 }
 
-async function login() {
+async function login(username, password) {
+    const user = await User.findOne({ username }).collation({ locale: 'en', strength: 2 })
+    console.log(user);
+    if (!user) {
+        throw new Error('Username and password is wrong!');
+    }
 
+    let hasMatch = bcrypt.compare(password, user.hashedPassword)
+    if (hasMatch == false) {
+        throw new Error('Username and password is wrong!');
+    }
+    let token = createSession(user)
+
+    return token;
 }
 
 function createSession({ _id, username }) {
@@ -33,8 +45,13 @@ function createSession({ _id, username }) {
     return token;
 }
 
+function verifyToken(token) {
+    let jwtSucces = jwt.verify(token, JWT_SECRET)
+    return jwtSucces;
+}
+
 async function logout() {
 
 }
 
-module.exports= {register}
+module.exports = { register, login, verifyToken }

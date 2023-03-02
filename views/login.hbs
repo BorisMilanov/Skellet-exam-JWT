@@ -2,9 +2,9 @@
             <h2>Login:</h2>
             <form id="formLogin" method="post" action="/auth/login">
                 <label for="username">Username:</label>
-                 <input type="text" id="username" name="email" placeholder="Enter your Username" value="{{body.email}}"> {{!-- It was mistaken here, email is in exam requirments --}}
+                 <input type="text" id="email" name="email" placeholder="Enter your Username" value="{{body.email}}"> {{!-- It was mistaken here, email is in exam requirments --}}
                 <label for="password">Password:</label>
-                <input type="password" id="password" name="password" placeholder="Enter your Password">
+                <input type="password" id="password" name="password" value="{{body.password}}" placeholder="Enter your Password">
                 <input type="submit" class="login" value="Login">
             </form>
         </section>

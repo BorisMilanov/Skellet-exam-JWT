@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const DB_NAME = 'RandomTests'
-const connectionString = "mongodb://localhost:27017/RandomTests"
+const connectionString = "mongodb://localhost:27017/Battleground"
 
 module.exports = async (app) => {
     try{

@@ -13,12 +13,12 @@ authController.post('/register', async (req, res) => {
         if(validator.isEmail(req.body.email)== false){
             throw new Error('Invalid email!');
         }
-        if (req.body.username == '' || req.body.password ==''){
-            throw new Error('All fields are required');
-        }
-        if (req.body.password != req.body.repass) {
-            throw new Error('Passwords didnt match')
-        }
+        // if (req.body.username == '' || req.body.password ==''){
+        //     throw new Error('All fields are required');
+        // }
+        // if (req.body.password != req.body.repass) {
+        //     throw new Error('Passwords didnt match')
+        // }
         const token = await register(req.body.email,req.body.username, req.body.password)
        
         res.cookie('tokenSession', token)
@@ -34,7 +34,7 @@ authController.get('/login', (req, res) => {
 })
 
 authController.post('/login', async (req, res) => {
-    try{const token = await login(req.body.username, req.body.password);
+    try{const token = await login(req.body.email, req.body.password);
     res.cookie('tokenSession',token)
     res.redirect('/')}
     catch(err){

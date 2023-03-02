@@ -4,32 +4,33 @@ const User = require('../models/User');
 
 const JWT_SECRET = 'quuqiajdaldkdalak';
 
-async function register(email,username, password) {
-    const existingUser = await User.findOne({ username }).collation({ locale: 'en', strength: 2 })
-    if (existing) {
-        throw new Error('Username is taken!');
+async function register(email, username, password) {
+    const existingEmail = await User.findOne({ email }).collation({ locale: 'en', strength: 2 })
+    if (existingEmail) {
+        throw new Error('Email is taken!');
     }
-    const existingEmail = await User.findOne({email}).collation({ locale: 'en', strength: 2 })
-    if (!existingEmail) {
-        throw new Error('Username and password is wrong!');
+    const existingUsername = await User.findOne({ username }).collation({ locale: 'en', strength: 2 })
+    if (existingUsername) {
+        throw new Error('Username is taken!');
+
     }
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const user = await User.create({ email,username, hashedPassword });
+    const user = await User.create({ email, username, hashedPassword });
 
     //TODO see assiment if register save jwt and session 
     const token = createSession(user);
     return token;
 }
 
-async function login(username, password) {
-    const existingUser = await User.findOne({ username }).collation({ locale: 'en', strength: 2 })
+async function login(email, password) {
+    const existingUser = await User.findOne({ email }).collation({ locale: 'en', strength: 2 })
     console.log(existingUser);
     if (!existingUser) {
-        throw new Error('Username and password is wrong!');
+        throw new Error('Email and password is wrong!');
     }
-    
-    let hasMatch = bcrypt.compare(password, user.hashedPassword)
+
+    let hasMatch = bcrypt.compare(password, existingUser.hashedPassword)
     if (hasMatch == false) {
         throw new Error('Username and password is wrong!');
     }

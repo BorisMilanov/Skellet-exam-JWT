@@ -1,9 +1,10 @@
 function hasUser() {
-    if (req.user) {
+    return (req,res,next) =>{ if (req.user) {
         next();
     } else {
-        resizeBy.redirect('/auth/login')
-    }
+        res.redirect('/auth/login') //guards wasnt okay
+    }}
+   
 }
 
 function isGuest() {

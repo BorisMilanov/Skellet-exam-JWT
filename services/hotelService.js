@@ -1,11 +1,11 @@
-const Hotel = require("..models/Hotel");
+const Hotel = require("../models/Hotel");
 
 async function getAll(){
-
+    return Hotel.find({}).lean()
 }
 
 async function getById(id){
-
+    return Hotel.findById(id).lean()
 }
 
 async function create(hotel){

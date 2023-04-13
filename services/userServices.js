@@ -24,7 +24,7 @@ async function register(email,username, password) {
 
 async function login(email, password) {
     const existing = await User.findOne({ email }).collation({ locale: 'en', strength: 2 })
-    console.log(user);
+ 
     if (!existing) {
         throw new Error('Email and password is wrong!');
     }

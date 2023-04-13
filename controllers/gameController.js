@@ -1,6 +1,6 @@
 const gameController = require('express').Router();
 const { hasUser } = require('../middlewares/guards')
-const { create } = require('../services/gameServices')
+const { create,getAll } = require('../services/gameServices')
 
 gameController.get("/create",  async (req, res) => {
     res.render('create')
@@ -8,7 +8,7 @@ gameController.get("/create",  async (req, res) => {
 
 gameController.post('/create', async (req, res) => {
     const game = {
-        name: req.body.gamename,
+        gamename: req.body.gamename,
         image: req.body.image,
         price: req.body.price,
         description: req.body.description,
@@ -25,5 +25,11 @@ gameController.post('/create', async (req, res) => {
     }
 })
 
-
+gameController.get('/view', async(req,res)=>{
+    const games = await getAll()
+    res.render('catalog',{
+        
+        games
+    })
+})
 module.exports = gameController

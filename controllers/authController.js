@@ -8,7 +8,7 @@ authController.get('/register', (req, res) => {
 
 authController.post('/register', async (req, res) => {
     console.log(req.body);
-    try{  const token = await register(req.body.username, req.body.password)
+    try{  const token = await register(req.body.email,req.body.username, req.body.password)
         res.cookie('tokenSession', token)
         res.redirect('/')}
     catch(err){
@@ -22,7 +22,7 @@ authController.get('/login', (req, res) => {
 })
 
 authController.post('/login', async (req, res) => {
-    try{const token = await login(req.body.username, req.body.password);
+    try{const token = await login(req.body.email, req.body.password);
     res.cookie('tokenSession',token)
     res.redirect('/')}
     catch(err){

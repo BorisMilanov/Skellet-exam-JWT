@@ -6,32 +6,40 @@ authController.get('/register', (req, res) => {
     res.render('register');
 })
 
-authController.post('/register', async (req, res) => {
+authController.post('/register', async(req, res) => {
     console.log(req.body);
-    try{  const token = await register(req.body.username, req.body.password)
-        res.cookie('tokenSession', token)
-        res.redirect('/')}
-    catch(err){
-        console.log(err);
-        res.redirect('/register')
+    try {
+        if (req.body.password == '' || req.body.username == '') {
+            throw new Error('All fields are required');
+        }
+        const token = await register(req.body.username, req.body.password)
+        res.cookie('tokenSession', token);
+        res.redirect('/'); //TODO repassword 
+    } catch (error) {
+        const errors = [error.message]
+        res.render('register', { errors });
     }
 })
 
 authController.get('/login', (req, res) => {
-    res.render('login')
+    res.render('login');
 })
 
-authController.post('/login', async (req, res) => {
-    try{const token = await login(req.body.username, req.body.password);
-    res.cookie('tokenSession',token)
-    res.redirect('/')}
-    catch(err){
-        console.log(err);
-        res.redirect('/login')
+authController.post('/login', async(req, res) => {
+    try {
+        if (req.body.password == '' || req.body.username == '') {
+            throw new Error('All fields are required');
+        }
+        const token = await login(req.body.username, req.body.password);
+        res.cookie('tokenSession', token)
+        res.redirect('/')
+    } catch (error) {
+        const errors = [error.message];
+        res.redirect('/login', errors);
     }
 })
 
-authController.get('/logout', (req,res)=> {
+authController.get('/logout', (req, res) => {
     res.clearCookie('tokenSession');
     res.redirect('/')
 })

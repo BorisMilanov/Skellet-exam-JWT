@@ -14,7 +14,10 @@ authController.post('/register', async(req, res) => {
         }
         const token = await register(req.body.username, req.body.password)
         res.cookie('tokenSession', token);
-        res.redirect('/'); //TODO repassword 
+        if (req.body.password != req.body.repassword) {
+            throw new Error('Password dont match');
+        }
+        res.redirect('/');
     } catch (error) {
         const errors = [error.message]
         res.render('register', { errors });
@@ -30,12 +33,13 @@ authController.post('/login', async(req, res) => {
         if (req.body.password == '' || req.body.username == '') {
             throw new Error('All fields are required');
         }
+
         const token = await login(req.body.username, req.body.password);
         res.cookie('tokenSession', token)
         res.redirect('/')
     } catch (error) {
         const errors = [error.message];
-        res.redirect('/login', errors);
+        res.render('login', { errors });
     }
 })
 

@@ -1,7 +1,7 @@
 const cookieParser = require('cookie-parser');
 const { register, login } = require('../services/userServices')
 const authController = require('express').Router();
-
+const { parseError, parserError } = require('../middlewares/parser')
 authController.get('/register', (req, res) => {
     res.render('register');
 })
@@ -19,7 +19,7 @@ authController.post('/register', async(req, res) => {
         }
         res.redirect('/');
     } catch (error) {
-        const errors = [error.message]
+        const errors = parserError(error);
         res.render('register', { errors });
     }
 })
@@ -35,10 +35,10 @@ authController.post('/login', async(req, res) => {
         }
 
         const token = await login(req.body.username, req.body.password);
-        res.cookie('tokenSession', token)
-        res.redirect('/')
+        res.cookie('tokenSession', token);
+        res.redirect('/');
     } catch (error) {
-        const errors = [error.message];
+        const errors = parseError(error);
         res.render('login', { errors });
     }
 })

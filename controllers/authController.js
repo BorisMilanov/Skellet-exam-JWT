@@ -1,4 +1,4 @@
-const cookieParser = require('cookie-parser');
+const validator = require('validator');
 const { register, login } = require('../services/userServices')
 const authController = require('express').Router();
 const { parserError } = require('../middlewares/parser')
@@ -12,7 +12,10 @@ authController.post('/register', async(req, res) => {
         if (req.body.password == '' || req.body.username == '') {
             throw new Error('All fields are required');
         }
-        const token = await register(req.body.username, req.body.password)
+        if ((validator.isEmail(req.body.email)) == false) {
+            throw new Error('Invalid email!');
+        }
+        const token = await register(req.body.email, req.body.username, req.body.password)
         res.cookie('tokenSession', token);
         if (req.body.password != req.body.repassword) {
             throw new Error('Password dont match');

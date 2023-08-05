@@ -1,18 +1,17 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
-
+const validator = require('validator')
 const JWT_SECRET = 'quuqiajdaldkdalak';
 
-async function register(username, password) {
+async function register(username, password, email) {
     const existing = await User.findOne({ username }).collation({ locale: 'en', strength: 2 })
     if (existing) {
         throw new Error('Username is taken!');
     }
-
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const user = await User.create({ username, hashedPassword });
+    const user = await User.create({ username, hashedPassword, email });
 
     //TODO see assiment if register save jwt and session 
     const token = createSession(user);
